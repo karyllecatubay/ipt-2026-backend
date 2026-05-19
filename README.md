@@ -1,4 +1,4 @@
-Node.js TypeScript MySQL Boilerplate API
+Final Project: Full-Stack Authentication System Deployment
 A simple authentication REST API built with Node.js, TypeScript, Express, Sequelize, and JWT.
 Live Deployment
 
@@ -20,7 +20,7 @@ Setup
 Install dependencies — run npm install
 Configure environment variables — create a .env file with DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET, RESEND_API_KEY, CORS_ORIGIN. Never commit .env to GitHub.
 Start the server — run npm run start:dev
-Open Swagger UI — go to http://localhost:4000/api-docs
+Open Swagger UI — go to https://ipt-2026-backend-ujcl.onrender.com/api-docs
 
 Production Deployment (Render)
 
