@@ -1,89 +1,46 @@
-# Node.js TypeScript MySQL Boilerplate API
-
+Node.js TypeScript MySQL Boilerplate API
 A simple authentication REST API built with Node.js, TypeScript, Express, Sequelize, and JWT.
+Live Deployment
 
-## Live Deployment
-- **Frontend URL:** https://ipt-2026-frontend-eta.vercel.app
-- **Backend URL:** https://node-mysql-api-yes5.onrender.com
-- **Swagger API Docs:** https://node-mysql-api-yes5.onrender.com/api-docs
+Frontend URL: https://ipt-2026-frontendd.onrender.com
+Backend URL: https://ipt-2026-backend-ujcl.onrender.com
+Swagger API Docs: https://ipt-2026-backend-ujcl.onrender.com/api-docs
 
-## Tech Stack
-- **Node.js + TypeScript** — runtime and language
-- **Express** — web framework
-- **MySQL + Sequelize** — database and ORM
-- **JWT** — authentication tokens
-- **Resend** — email sending (API)
+Tech Stack
 
-## Setup
+Node.js + TypeScript — runtime and language
+Express — web framework
+MySQL + Sequelize (Aiven) — database and ORM
+JWT — authentication tokens
+Resend — email sending (HTTPS API)
+Deployed on Render
 
-1. **Install dependencies**
-   ```bash
-   npm install
-   ```
+Setup
 
-2. **Configure environment variables**
-   - Create a `.env` file in the root directory
-   - Add your MySQL credentials and JWT secret:
-     ```env
-     DB_HOST=localhost
-     DB_USER=root
-     DB_PASSWORD=yourpassword
-     DB_NAME=node_mysql_api
-     JWT_SECRET=your_random_secret_here
-     RESEND_API_KEY=your_resend_api_key
-     CORS_ORIGIN=http://localhost:4200
-     ```
-   - *Note: `config.json` is no longer required and is gitignored for security.*
+Install dependencies — run npm install
+Configure environment variables — create a .env file with DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, JWT_SECRET, RESEND_API_KEY, CORS_ORIGIN. Never commit .env to GitHub.
+Start the server — run npm run start:dev
+Open Swagger UI — go to http://localhost:4000/api-docs
 
-3. **Start the server**
-   ```bash
-   npm run start:dev
-   ```
+Production Deployment (Render)
 
-4. **Open Swagger UI**
-   ```
-   http://localhost:4000/api-docs
-   ```
+NODE_ENV: production
+JWT_SECRET: your secure secret
+CORS_ORIGIN: https://ipt-2026-frontendd.onrender.com
+DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME: your Aiven credentials
+RESEND_API_KEY: your Resend API key
 
-## Production Deployment (Render)
-Ensure the following Environment Variables are set in your Render Web Service:
-- `NODE_ENV`: `production`
-- `JWT_SECRET`: `(Your secure secret)`
-- `CORS_ORIGIN`: `https://ipt-2026-frontend-eta.vercel.app`
-- `DB_HOST`: `(Your Aiven/External DB Host)`
-- `DB_USER`: `(Your DB User)`
-- `DB_PASSWORD`: `(Your DB Password)`
-- `DB_NAME`: `(Your DB Name)`
-- `RESEND_API_KEY`: `(Your Resend API Key)`
+API Endpoints
+MethodRouteAuthDescriptionPOST/accounts/registerPublicRegister new accountPOST/accounts/verify-emailPublicVerify email with tokenPOST/accounts/authenticatePublicLogin and get JWT tokenPOST/accounts/refresh-tokenCookieGet new JWT tokenPOST/accounts/revoke-tokenJWTRevoke refresh tokenPOST/accounts/forgot-passwordPublicRequest password resetPOST/accounts/validate-reset-tokenPublicValidate reset tokenPOST/accounts/reset-passwordPublicReset passwordGET/accountsAdminGet all accountsGET/accounts/:idJWTGet account by IDPOST/accountsAdminCreate accountPUT/accounts/:idJWTUpdate accountDELETE/accounts/:idJWTDelete account
+How Authentication Works
 
-## API Endpoints
+Register → verify email → login
+Login returns a JWT token (expires in 15 min) and a refresh token (expires in 7 days)
+Use JWT as Bearer Token in Authorization header for protected routes
+Use the refresh token to get a new JWT when it expires
 
-| Method | Route | Auth | Description |
-|--------|-------|------|-------------|
-| POST | /accounts/register | Public | Register new account |
-| POST | /accounts/verify-email | Public | Verify email with token |
-| POST | /accounts/authenticate | Public | Login and get JWT token |
-| POST | /accounts/refresh-token | Cookie | Get new JWT token |
-| POST | /accounts/revoke-token | JWT | Revoke refresh token |
-| POST | /accounts/forgot-password | Public | Request password reset |
-| POST | /accounts/validate-reset-token | Public | Validate reset token |
-| POST | /accounts/reset-password | Public | Reset password |
-| GET | /accounts | Admin | Get all accounts |
-| GET | /accounts/:id | JWT | Get account by ID |
-| POST | /accounts | Admin | Create account |
-| PUT | /accounts/:id | JWT | Update account |
-| DELETE | /accounts/:id | JWT | Delete account |
+Notes
 
-## How Authentication Works
-
-1. Register → verify email → login
-2. Login returns a **JWT token** (expires in 15 min) and a **refresh token** (expires in 7 days)
-3. Use JWT as `Bearer Token` in the Authorization header for protected routes
-4. Use the refresh token to get a new JWT when it expires
-
-## Notes
-- First registered account is automatically **Admin**
-- All other accounts are **User** by default
-- Admin can access and manage all accounts
-- Users can only access their own account
-- Cookies are configured with `SameSite: None` and `Secure: true` for cross-site support (Vercel to Render).
+First registered account is automatically Admin
+All other accounts are User by default
+No sensitive data hardcoded — all secrets handled via environment variables on Render
