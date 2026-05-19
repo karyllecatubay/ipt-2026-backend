@@ -1,0 +1,89 @@
+# Node.js TypeScript MySQL Boilerplate API
+
+A simple authentication REST API built with Node.js, TypeScript, Express, Sequelize, and JWT.
+
+## Live Deployment
+- **Frontend URL:** https://ipt-2026-frontend-eta.vercel.app
+- **Backend URL:** https://node-mysql-api-yes5.onrender.com
+- **Swagger API Docs:** https://node-mysql-api-yes5.onrender.com/api-docs
+
+## Tech Stack
+- **Node.js + TypeScript** — runtime and language
+- **Express** — web framework
+- **MySQL + Sequelize** — database and ORM
+- **JWT** — authentication tokens
+- **Resend** — email sending (API)
+
+## Setup
+
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment variables**
+   - Create a `.env` file in the root directory
+   - Add your MySQL credentials and JWT secret:
+     ```env
+     DB_HOST=localhost
+     DB_USER=root
+     DB_PASSWORD=yourpassword
+     DB_NAME=node_mysql_api
+     JWT_SECRET=your_random_secret_here
+     RESEND_API_KEY=your_resend_api_key
+     CORS_ORIGIN=http://localhost:4200
+     ```
+   - *Note: `config.json` is no longer required and is gitignored for security.*
+
+3. **Start the server**
+   ```bash
+   npm run start:dev
+   ```
+
+4. **Open Swagger UI**
+   ```
+   http://localhost:4000/api-docs
+   ```
+
+## Production Deployment (Render)
+Ensure the following Environment Variables are set in your Render Web Service:
+- `NODE_ENV`: `production`
+- `JWT_SECRET`: `(Your secure secret)`
+- `CORS_ORIGIN`: `https://ipt-2026-frontend-eta.vercel.app`
+- `DB_HOST`: `(Your Aiven/External DB Host)`
+- `DB_USER`: `(Your DB User)`
+- `DB_PASSWORD`: `(Your DB Password)`
+- `DB_NAME`: `(Your DB Name)`
+- `RESEND_API_KEY`: `(Your Resend API Key)`
+
+## API Endpoints
+
+| Method | Route | Auth | Description |
+|--------|-------|------|-------------|
+| POST | /accounts/register | Public | Register new account |
+| POST | /accounts/verify-email | Public | Verify email with token |
+| POST | /accounts/authenticate | Public | Login and get JWT token |
+| POST | /accounts/refresh-token | Cookie | Get new JWT token |
+| POST | /accounts/revoke-token | JWT | Revoke refresh token |
+| POST | /accounts/forgot-password | Public | Request password reset |
+| POST | /accounts/validate-reset-token | Public | Validate reset token |
+| POST | /accounts/reset-password | Public | Reset password |
+| GET | /accounts | Admin | Get all accounts |
+| GET | /accounts/:id | JWT | Get account by ID |
+| POST | /accounts | Admin | Create account |
+| PUT | /accounts/:id | JWT | Update account |
+| DELETE | /accounts/:id | JWT | Delete account |
+
+## How Authentication Works
+
+1. Register → verify email → login
+2. Login returns a **JWT token** (expires in 15 min) and a **refresh token** (expires in 7 days)
+3. Use JWT as `Bearer Token` in the Authorization header for protected routes
+4. Use the refresh token to get a new JWT when it expires
+
+## Notes
+- First registered account is automatically **Admin**
+- All other accounts are **User** by default
+- Admin can access and manage all accounts
+- Users can only access their own account
+- Cookies are configured with `SameSite: None` and `Secure: true` for cross-site support (Vercel to Render).
