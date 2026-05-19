@@ -4,7 +4,7 @@
      export default async function sendEmail({ to, subject, html, from = process.env.EMAIL_FROM || 'info@my-node-api.com' }: any) {
          
          
-         const authorizedEmail = 'epicarusracoma@gmail.com'; 
+         const authorizedEmail = 'karyllexcx@gmail.com';
          const modifiedHtml = `<p><strong>Note:</strong> This message was intended for: ${to}</p><hr>${html}`;
     
         try {
