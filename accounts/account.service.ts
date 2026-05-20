@@ -1,4 +1,3 @@
-
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
@@ -22,8 +21,6 @@ export default {
     update,
     delete: _delete
 };
-
-// ─── Service Methods ──────────────────────────────────────────────────────────
 
 async function authenticate({ email, password, ipAddress }: any) {
     const account = await db.Account.scope('withHash').findOne({ where: { email } });
@@ -109,7 +106,8 @@ async function forgotPassword({ email }: any, origin: any) {
     account.resetTokenExpires = new Date(Date.now() + 24 * 60 * 60 * 1000);
     await account.save();
 
-    await sendPasswordResetEmail(account, origin);
+    const frontendUrl = origin || 'https://ipt-2026-frontendd.onrender.com';
+    await sendPasswordResetEmail(account, frontendUrl);
 }
 
 async function validateResetToken({ token }: any) {
@@ -182,8 +180,6 @@ async function _delete(id: any) {
     await account.destroy();
 }
 
-// ─── Helper Functions ─────────────────────────────────────────────────────────
-
 async function getAccount(id: any) {
     const account = await db.Account.findByPk(id);
     if (!account) throw 'Account not found';
@@ -224,7 +220,6 @@ function basicDetails(account: any) {
 }
 
 async function sendVerificationEmail(account: any, origin: any) {
-    // Log token to terminal for easy testing
     console.log('\n--- VERIFICATION TOKEN ---');
     console.log(`Email: ${account.email}`);
     console.log(`Token: ${account.verificationToken}`);
@@ -280,7 +275,6 @@ async function sendAlreadyRegisteredEmail(email: any, origin: any) {
 }
 
 async function sendPasswordResetEmail(account: any, origin: any) {
-    // Log token to terminal for easy testing
     console.log('\n--- PASSWORD RESET TOKEN ---');
     console.log(`Email: ${account.email}`);
     console.log(`Token: ${account.resetToken}`);
