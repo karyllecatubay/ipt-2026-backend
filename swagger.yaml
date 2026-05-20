@@ -4,7 +4,7 @@ info:
   description: Node.js + MySQL - API with email sign-up, verification, authentication and forgot password
   version: 1.0.0
 servers:
-  - url: https://ipt-2026-backend.onrender.com
+  - url: https://ipt-2026-backend-ujcl.onrender.com
     description: Production server
 paths:
   /accounts/authenticate:
